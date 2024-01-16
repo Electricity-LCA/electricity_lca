@@ -1,0 +1,23 @@
+Type,Subtype,CLIMATE CHANGE FRESHWATER [g CO2 eq.],EUTROPHICATION [mg P eq.],CARCINOGENIC EFFECTS [?CTUh],IONISING RADIATION [g 235U eq.],LAND USE [points],DISSIPATED WATER [l],MINERALS AND METALS [?g Sb eq.]
+Hard coal ,PC without CCS,1000,490,7.3,9.1,2.4,2.9,520
+Hard coal,IGCC without CCS,850,420,6.4,7.5,2.1,1.7,590
+Hard coal,SC without CCS,950,460,6.9,8.2,2.3,2.6,500
+Natural gas,SC without CCS,430,20,1.3,9.2,0.2,1.2,240
+Hard coal,PC with CCS,370,690,10,13,3.4,5.1,780
+Hard coal,IGCC with CCS,280,570,8.6,10,2.8,2.7,690
+Hard coal,SC with CCS,330,640,9.7,12,3.2,4.6,740
+Natural gas,NGCC with CCS,130,24,1.7,11,0.24,2,310
+Hydro,660 MW,150,13,2.6,12,2.5,0.37,610
+Hydro,360 MW,11,1.3,0.35,0.84,0.21,0.039,61
+Nuclear,average,5.1,5.8,0.51,14,0.058,2.4,330
+CSP,tower,22,11,2.1,4.5,3.6,0.18,340
+CSP,trough,42,14,6.3,6.1,3.5,0.34,650
+PV,poly-Si ground-mounted,37,28,4.1,9.1,1.9,0.58,4500
+PV,poly-Si roof-mounted,37,39,1.6,9.8,0.86,0.63,7200
+PV,CdTe ground-mounted,12,8.8,3.4,1.9,1.4,0.13,1500
+PV,CdTe roof-mounted,15,14,1.1,1.9,0.15,0.16,2600
+PV,CIGS ground-mounted,11,8.8,3.4,1.8,1.3,0.13,1700
+PV,CIGS roof-mounted,14,14,1.1,1.8,0.15,0.16,2800
+Wind,onshore,12,6.7,6.6,1,0.11,0.18,680
+Wind,offshore concrete foundation,14,7,5.5,1.2,0.11,0.16,980
+Wind,offshore steel foundation,13,6.8,7,1.2,0.099,0.16,990
