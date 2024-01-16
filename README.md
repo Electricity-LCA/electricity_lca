@@ -1,7 +1,10 @@
 # electricity_lca
 Convert live electricity data streams into LCA models
 
+ # Datasets
+1. Ember-Climate Global Monthly Data from https://ember-climate.org/data/data-catalogue/
 
+   
 # Installation
 
 # Acknowledgements
