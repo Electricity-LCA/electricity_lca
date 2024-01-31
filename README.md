@@ -1,5 +1,5 @@
-# electricity_lca
-Convert live electricity data streams into LCA models
+# Multi-Impact Electricity modelling using live data sources
+Estimate real-time environmental impacts using electricity generation data reported by national and super-national bodies
 
 # Set up
 1. Create an ENTSO-E account and request an API key
@@ -11,20 +11,52 @@ Convert live electricity data streams into LCA models
 ```commandline
 venv create -r requirement.txt
 ```
+7. Run `src/orm/create_database.py` to initalize the database schema and load static data 
+8. Run all tests under `tests/`
 
-# Running
+# How to use
 TBD
 
-# Datasets
+# Data sources
 ## Environmental data
 1. UNECE. _“Life Cycle Assessment of Electricity Generation Options | UNECE.”_ Accessed December 5, 2023. https://unece.org/sed/documents/2021/10/reports/life-cycle-assessment-electricity-generation-options.
 
 ##  Electricity data
-1. ENTSO-E
+1. ENTSO-E, for electricity generation data from European member states and electricity regions
 2. Ember Global Monthly Data from https://ember-climate.org/data/data-catalogue/
 
-   
+See references for further
+
+# Data Engineering Rational and Design Choice
+## DevOps - GitHub and Pytest
+- Repository code: https://github.com/tur-ium/electricity_lca (contact Artur for access)
+- Standardization - cookiecutter data science template, `pandera` for ensuring conformance of data to expectations, table-level SQL constraints to perform validity checks
+- Unit / integration testing : Pytest
+- ETL - Python + pandas (with pyArrow)
+
+## Database - Postgres
+Data comes in tabular format => tabular relational database not Mongo / other document-oriented database
+
+Reviewed common RDBMS’s : MySQL, SQLite, Microsoft SQL server, and Postgres. Decided for Postgres, based on the satisfaction of all project requirements
+  - Free, open source, trustworthy and widely used
+  - SQL standard conformity, functionality, and ease of use
+  - Strong software ecosystem Support across cloud platforms, management tooling  (e.g. SQL Alchemy and pgAdmin)
+
+Database schema and ORM managed using SQL Alchemy
+
+Database initialized by running one python script -> create_database.py
+
+## Cloud Platform - AWS
+- Google Cloud Platform - Benefits: scale storage separate from db compute. Drawbacks: complex to connect to local dev env, limited trial, obscure pricing
+- Saturn Cloud (https://saturncloud.io/) - only 10 free hours
+- DeepNote - only support Jupyter Notebooks
+- PythonAnywhere - benefits: ease-of-use, supports cron jobs, sharing shells, free tier. Drawbacks: not free to use postgres
+- Amazon Web Services - 12 month free trial includes all required functionalities, good practical experience, scalable. Drawback - monopolized, vendor lock-in, limited trial
+
+
 
 
 # Acknowledgements
-This project is structured based on [data science cookiecutter template](https://github.com/drivendata/cookiecutter-data-science.git) by [DrivenData](https://www.drivendata.org/) 
+- This is a project undertaken as part of training for the _Data Engineering_ course run by [DataScientest](https://datascientest.com/) from August 2023 - July 2024. Concepts from the course have been applied where relevant to the project.
+- The [data science cookiecutter template](https://github.com/drivendata/cookiecutter-data-science.git) by [DrivenData](https://www.drivendata.org/) for the starting structure for the project
+- Last but not least my coach Gregor Wernet for the initial motivation for this project.
