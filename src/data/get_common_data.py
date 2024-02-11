@@ -4,6 +4,8 @@ from dataclasses import dataclass
 import pandas as pd
 import sqlalchemy
 
+from sqlalchemy.orm import sessionmaker
+
 
 @dataclass
 class BasicDataCache:
