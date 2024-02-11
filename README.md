@@ -15,7 +15,7 @@ venv create -r requirement.txt
 8. Run all tests under `tests/`
 
 # How to use
-TBD
+1. Run `launch.sh` (on linux)
 
 # Data sources
 ## Environmental data
@@ -53,8 +53,13 @@ Database initialized by running one python script -> create_database.py
 - PythonAnywhere - benefits: ease-of-use, supports cron jobs, sharing shells, free tier. Drawbacks: not free to use postgres
 - Amazon Web Services - 12 month free trial includes all required functionalities, good practical experience, scalable. Drawback - monopolized, vendor lock-in, limited trial
 
+# Application structure
+1. Pipelines for data retrieval from ENTSO-E can be found in the `src/data/` folder
+2. ORM layer (src/orm) uses sqlalchemy `declarative_base` to provide an object-orientated interface for accessing and manipulating objects in the database. Also includes table creation in `create_database.py`
+3. Calculation microservice (src/calculation/main.py:app)
+4. Streamlit dashboard (src/visualization/main.py) shows the visual interface
 
-
+The calculation microservice runs continuously in the background and receives requests from the dashboard when need to retrieve new data from the database or calculate fresh environmental impacts
 
 # Acknowledgements
 - This is a project undertaken as part of training for the _Data Engineering_ course run by [DataScientest](https://datascientest.com/) from August 2023 - July 2024. Concepts from the course have been applied where relevant to the project.
