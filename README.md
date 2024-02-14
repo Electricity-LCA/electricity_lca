@@ -11,7 +11,7 @@ Estimate real-time environmental impacts using electricity generation data repor
 ```commandline
 venv create -r requirement.txt
 ```
-7. Run `src/orm/create_database.py` to initalize the database schema and load static data 
+7. Run `python src/setup/setup.py` to initalize the database schema and load static data 
 8. Run all tests under `tests/`
 
 # How to use
@@ -54,12 +54,16 @@ Database initialized by running one python script -> create_database.py
 - Amazon Web Services - 12 month free trial includes all required functionalities, good practical experience, scalable. Drawback - monopolized, vendor lock-in, limited trial
 
 # Application structure
-1. Pipelines for data retrieval from ENTSO-E can be found in the `src/data/` folder
-2. ORM layer (src/orm) uses sqlalchemy `declarative_base` to provide an object-orientated interface for accessing and manipulating objects in the database. Also includes table creation in `create_database.py`
-3. Calculation microservice (src/calculation/main.py:app)
-4. Streamlit dashboard (src/visualization/main.py) shows the visual interface
+1. Simple extraction scripts (for extracting data from csvs for example), can be found in `src/extract`
+2. ETL (extract-transform-load) pipelines that retrieve, process and store data into a database (or other data storage system) can be found in the `src/pipelines/` folder
+3. ORM layer (src/orm) uses sqlalchemy `declarative_base` to provide an object-orientated interface for accessing and manipulating objects in the database.
+4. A microservice that provides an api interface for the solution can be found in `src/microservice`
+5. Dashboard providing a visual interface can be found in `src/visualization/main.py`
 
-The calculation microservice runs continuously in the background and receives requests from the dashboard when need to retrieve new data from the database or calculate fresh environmental impacts
+The microservice runs continuously in the background and receives requests from the dashboard when need to retrieve new data from the database or calculate fresh environmental impacts. 
+
+A high level illustration of the components looks like this:
+![data flow.png](docs/data%20flow.png)
 
 # Acknowledgements
 - This is a project undertaken as part of training for the _Data Engineering_ course run by [DataScientest](https://datascientest.com/) from August 2023 - July 2024. Concepts from the course have been applied where relevant to the project.
