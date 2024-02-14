@@ -1,13 +1,13 @@
-import logging
-
 import sqlalchemy
-from dotenv import load_dotenv,find_dotenv
+from dotenv import load_dotenv
 import os
 import psycopg2
 import pandas as pd
 
 import logging
 import sys
+
+from src.extract.unece_to_df import load_unece_lcia_data
 
 logger = logging.getLogger('data_loader')
 logger.addHandler(logging.FileHandler('data_loader.log'))
@@ -42,10 +42,6 @@ def connect_elec_lca_db():
     conn.close()
 
 
-def load_unece_lcia_data() -> pd.DataFrame:
-    df = pd.read_csv('/home/artur/PycharmProjects/electricity_lca/data/processed/lcia_elec_unece_table13.csv')
-    return df
-
 def load_and_save_impact_data():
     logger = logging.Logger('unece_loader.log')
 
@@ -70,14 +66,14 @@ def load_and_save_impact_data():
 
     logger.info(f'There are {len(elec_generation_types)+len(elec_generation_subtypes)} electricity generation types to store')
     # Clear any existing ElectricityGenerationTypes from ElectricityGenerationTypes table
-    with engine.connect() as connection:
-        deletion_result = connection.execute(
-            sqlalchemy.text(f'DELETE FROM public."ElectricityGenerationTypes"')
-        )
-        connection.commit()
-        print(f'{deletion_result.rowcount} rows deleted')
+    # with engine.connect() as connection:
+        # deletion_result = connection.execute(
+        #     sqlalchemy.text(f'DELETE FROM public."ElectricityGenerationTypes"')
+        # )
+        # connection.commit()
+        # print(f'{deletion_result.rowcount} rows deleted')
 
-    elec_generation_types.to_sql(name='ElectricityGenerationTypes',con=engine,if_exists='replace',index=False)
+    elec_generation_types.to_sql(name='ElectricityGenerationTypes',con=engine,if_exists='append',index=False)
     elec_generation_subtypes.to_sql(name='ElectricityGenerationTypes', con=engine, if_exists='append', index=False)
 
     # Transform data for loading into the ImpactCategories table
@@ -97,7 +93,7 @@ def load_and_save_impact_data():
     impact_categories.to_sql(name='ImpactCategories',con=engine,if_exists='append',index=False)
 
     # get impact category table (so that have keys to use)
-    actual_impact_categories_df = pd.read_sql('SELECT * FROM ImpactCategories', con=engine)
+    actual_impact_categories_df = pd.read_sql('SELECT * FROM public."ImpactCategories"', con=engine)
     # Create a fact table for StoredLCIAResults
     # TODO
     impact_categories.join(actual_impact_categories_df, left_on='ImpactCategoryName')

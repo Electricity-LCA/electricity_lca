@@ -11,7 +11,7 @@ import uvicorn
 
 
 from src.data.get_common_data import load_common_data_from_db
-from src.orm.base import ElectricityGenerationNew, Regions
+from src.orm.base import ElectricityGeneration, Regions
 
 ROW_LIMIT = 500
 load_dotenv()
@@ -66,9 +66,9 @@ async def get_electricity_generation(date_start, region_code: str, generation_ty
         region_id = int(region_id_df.iat[0, 0])
         logging.warning(f'REGION IS {region_id}')
 
-        query = (session.query(ElectricityGenerationNew)
-                 .where(ElectricityGenerationNew.GenerationTypeId == generation_type_id)
-                 .where(ElectricityGenerationNew.RegionId == region_id)
+        query = (session.query(ElectricityGeneration)
+                 .where(ElectricityGeneration.GenerationTypeId == generation_type_id)
+                 .where(ElectricityGeneration.RegionId == region_id)
                  .limit(ROW_LIMIT))
 
         df = pd.read_sql(query.statement, session.bind)

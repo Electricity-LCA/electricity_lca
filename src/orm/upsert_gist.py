@@ -71,7 +71,7 @@ def upsert_df(df: pd.DataFrame, table_name: str, engine: sqlalchemy.engine.Engin
         """)
         connection.execute(query_upsert)
         connection.execute(text(f'DROP TABLE "{temp_table_name}"'))
-
+        # connection.commit()
     return True
 
 

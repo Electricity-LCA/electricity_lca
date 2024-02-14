@@ -2,8 +2,8 @@ from dotenv import load_dotenv
 import os
 import sqlalchemy as sqla
 
-from src.data.save_unece_lcia_results_to_database import load_and_save_impact_data
-from src.orm.fill_regions import fill_regions
+# from src.data.save_unece_lcia_results_to_database import load_and_save_impact_data
+# from src.orm.fill_regions import fill_regions
 from src.orm.base import sql_alchemy_base
 
 
@@ -28,9 +28,9 @@ def create_new_database(drop_existing=False):
     sql_alchemy_base.metadata.create_all(bind=engine)
 
     # Fill unchanging data tables
-    fill_regions()  # Fill the regions table
-    load_and_save_impact_data()  # Fill the environmental impact data tables
-
+    # fill_regions()  # Fill the regions table
+    # load_and_save_impact_data()  # Fill the environmental impact data tables
+    #
 
 if __name__ == '__main__':
     create_new_database(drop_existing=False)

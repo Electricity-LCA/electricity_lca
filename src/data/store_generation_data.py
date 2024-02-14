@@ -1,6 +1,5 @@
 import logging
 import time
-
 import pandas as pd
 import sqlalchemy
 
@@ -41,7 +40,7 @@ def store_generation_data_to_db(
     logging.info('Deleting any rows existing already for region, date range and generation type')
     with sql_engine.connect() as connection:
         deletion_result = connection.execute(
-            sqlalchemy.text(f"""DELETE FROM public."ElectricityGenerationNew" as el
+            sqlalchemy.text(f"""DELETE FROM public."ElectricityGeneration" as el
                 WHERE 
                     el."DateStamp" >= '{start}'
                 and el."DateStamp" <= '{end}'
@@ -51,7 +50,7 @@ def store_generation_data_to_db(
         connection.commit()
         logging.info(f'{deletion_result.rowcount} rows deleted')
     time.sleep(1)
-    count_rows = values_to_insert.to_sql('ElectricityGenerationNew', sql_engine, if_exists='append', index=False)
+    count_rows = values_to_insert.to_sql('ElectricityGeneration', sql_engine, if_exists='append', index=False)
     logging.info(f'Inserted {count_rows} values for region with id = `{region_id}` to database')
     e = time.time()
     logging.info(f'{e - s_1:.2f} s to write to database')
