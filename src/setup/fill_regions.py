@@ -9,7 +9,7 @@ from entsoe.mappings import Area
 
 
 def fill_regions():
-    countries = [x.name for x in Area]
+    bidding_zones = [x.name for x in Area]
 
     load_dotenv()
     HOST = os.getenv('ELEC_LCA_HOST')
@@ -26,7 +26,7 @@ def fill_regions():
         password=PASSWORD
     ))
 
-    countries_df = pd.DataFrame({'Code':countries,'Type':'Country','Description':None})
+    countries_df = pd.DataFrame({'Code': bidding_zones,'Type':'Bidding zone','Description':None})
     countries_df = countries_df.reset_index()
     countries_df = countries_df.rename({'index':'Id'},axis=1)
     countries_df.to_sql('Regions',sql_engine, if_exists='append',index=False)

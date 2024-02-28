@@ -41,7 +41,6 @@ class EnvironmentalImpacts(sql_alchemy_base):
         sqla.UniqueConstraint('ElectricityGenerationTypeId', 'ImpactCategoryId', name='UX_EnvironmentalImpacts'),
     )
 
-
 class Regions(sql_alchemy_base):
     __tablename__ = 'Regions'
     Id = sqla.Column(sqla.Integer, primary_key=True, autoincrement=True, nullable=True)
@@ -63,5 +62,6 @@ class ElectricityGeneration(sql_alchemy_base):
     __table_args__ = (
         sqla.ForeignKeyConstraint(['RegionId'], ['Regions.Id']),
         sqla.ForeignKeyConstraint(['GenerationTypeId'], ['ElectricityGenerationTypes.Id']),
-        sqla.UniqueConstraint('RegionId', 'DateStamp', name='UX_ElectricityGeneration'),
+        sqla.UniqueConstraint('RegionId', 'GenerationTypeId', 'DateStamp', name='UX_ElectricityGeneration'),
     )
+

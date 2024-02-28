@@ -82,11 +82,18 @@ def main():
     # Clear any existing ElectricityGenerationTypes from ElectricityGenerationTypes table
     with engine.connect() as connection:
         deletion_result = connection.execute(
-            sqla.text(f'DELETE FROM public."ElectricityGenerationTypes"'))
+            sqla.text(f'''
+DO 
+$do$
+BEGIN
+IF EXISTS(SELECT FROM pg_catalog.pg_tables WHERE tablename = 'ElectricityGenerationTypes')  
+THEN DELETE FROM public."ElectricityGenerationTypes";
+END IF;
+END
+$do$;'''))
         connection.commit()
     logging.info(f'{deletion_result.rowcount} rows deleted from ElectricityGenerationTypes')
     unece_generation_types.to_sql(name='ElectricityGenerationTypes', con=engine, if_exists='append', index=True)
-    # upsert_successful = upsert_df(df=unece_generation_types,table_name='ElectricityGenerationTypes',engine=engine)
 
     # Check what we have in the database
     with session_obj() as session:
@@ -95,21 +102,31 @@ def main():
         assert len(internal_generation_types) == len(
             unece_generation_types)  # At the moment we only have unece generation type
 
-    # Clear any electricity generation type mappings
     with engine.connect() as connection:
+
+        # Clear any electricity generation type mappings
         deletion_result = connection.execute(
-            sqla.text(f'DELETE FROM public."ElectricityGenerationTypesMapping"'))
+            sqla.text(f'''
+                DO 
+    $do$
+    BEGIN
+    IF EXISTS(SELECT FROM pg_catalog.pg_tables WHERE tablename = 'ElectricityGenerationTypesMapping')  
+    THEN DELETE FROM public."ElectricityGenerationTypesMapping";
+    END IF;
+    END
+    $do$;'''))
         connection.commit()
+
 
     generation_mapping = pd.DataFrame.from_dict(entsoe_generation_types_to_unece, orient='index').reset_index().rename(
         {'index': 'ExternalName', 0: 'InternalName'}, axis=1)
     generation_mapping_2 = \
-    generation_mapping.merge(internal_generation_types, left_on='InternalName', right_on='Name').rename(
-        {'Id': 'ElectricityGenerationTypeId'}, axis=1)[['ExternalName', 'ElectricityGenerationTypeId']]
+        generation_mapping.merge(internal_generation_types, left_on='InternalName', right_on='Name').rename(
+            {'Id': 'ElectricityGenerationTypeId'}, axis=1)[['ExternalName', 'ElectricityGenerationTypeId']]
     generation_mapping_2.loc[:, 'ElectricityGenerationTypeId'] = generation_mapping_2.loc[:,
                                                                  'ElectricityGenerationTypeId'].fillna(
         unknown_generation_type_id)
-    generation_mapping_2.loc[:, 'DataSourceName'] = 'UNECE'
+    generation_mapping_2.loc[:, 'DataSourceName'] = 'ENTSO-E'
     generation_mapping_2.loc[:,
     'Comment'] = f'Loaded from Table 13, UNECE. “Life Cycle Assessment of Electricity Generation Options | UNECE.” Accessed December 5, 2023. https://unece.org/sed/documents/2021/10/reports/life-cycle-assessment-electricity-generation-options.'
     generation_mapping_2.index.rename('Id', inplace=True)
@@ -136,7 +153,15 @@ def main():
     # Clear any existing impact categories from ImpactCategories table
     with engine.connect() as connection:
         deletion_result = connection.execute(
-            sqla.text(f'DELETE FROM public."ImpactCategories"')
+            sqla.text(f'''
+DO 
+$do$
+BEGIN
+IF EXISTS(SELECT FROM pg_catalog.pg_tables WHERE tablename = 'ImpactCategories')  
+THEN DELETE FROM public."ImpactCategories";
+END IF;
+END
+$do$;''')
         )
         connection.commit()
         logging.info(f'{deletion_result.rowcount} rows deleted')
@@ -162,7 +187,7 @@ def main():
     environmental_impacts_df['ReferenceYear'] = datetime.date(2021,1,1)
     environmental_impacts_df['PerUnit'] = 'kWh'
     environmental_impacts_df = environmental_impacts_df[
-        ['ElectricityGenerationTypeId', 'ImpactCategoryId', 'ImpactValue', 'ImpactCategoryUnit', 'ReferenceYear']]
+        ['ElectricityGenerationTypeId', 'ImpactCategoryId', 'ImpactValue', 'ImpactCategoryUnit', 'PerUnit', 'ReferenceYear']]
     environmental_impacts_df.drop_duplicates(['ElectricityGenerationTypeId', 'ImpactCategoryId'],inplace=True)
     environmental_impacts_df.to_sql(name='EnvironmentalImpacts', con=engine, if_exists='append', index=False)
 

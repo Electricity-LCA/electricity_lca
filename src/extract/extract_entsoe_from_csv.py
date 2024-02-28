@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
-import click
 import logging
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
 
 import pandas as pd
-import pandera as pdra
-from pandera import typing as pdrat
 
 # @click.command()
 # @click.argument('input_filepath', type=click.Path(exists=True))

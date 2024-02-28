@@ -53,6 +53,7 @@ def get_and_store_generation_for_region(
         of the list should be a tuple, like ('Fossil Hard coal', 'Actual Aggregated')
     @return: bool. True if stores to database successfully. False otherwise
     """
+    generation_type_to_id_mapping = cache.generation_type_mappings['ExternalName'].reset_index().set_index('ExternalName')['index'].to_dict()
     logging.info(f'Retrieving data for {region_code} for Date range FROM `{start}` TO `{end}` ...')
     s_0 = time.time()
     try:
@@ -68,6 +69,7 @@ def get_and_store_generation_for_region(
 
     generation_types_added = set()
     for generation_type_retrieved in generation.keys():
+        generation_type_retrieved = generation_type_retrieved[0]
         if (generation_type_filter is not None) and (generation_type_retrieved not in generation_type_filter):
             logging.debug(
                 f'Skipping generation type `{generation_type_retrieved}` as not in the generation type filter')
@@ -108,7 +110,7 @@ def main():
 
     start = pd.Timestamp('20231202', tz='Europe/Brussels')
     end = pd.Timestamp('20231203', tz='Europe/Brussels')
-    generation_type_filter = [('Fossil Hard coal', 'Actual Aggregated')]
+    generation_type_filter = None # [('Fossil Hard coal', 'Actual Aggregated')]
 
     load_dotenv()
     HOST = os.getenv('ELEC_LCA_HOST')

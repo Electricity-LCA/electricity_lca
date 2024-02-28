@@ -24,7 +24,7 @@ def store_generation_data_to_db(
     # Validate the Series provided:
     try:
         assert isinstance(generation_mw.index[0], pd.Timestamp)
-        assert isinstance(generation_mw.iloc[0], float)
+        assert isinstance(generation_mw.values[0,0], float)
     except AssertionError as e:
         raise e
     start = generation_mw.index.min()
@@ -32,9 +32,9 @@ def store_generation_data_to_db(
 
     # Create dataframe of values to insert
     values_to_insert = pd.DataFrame({'RegionId': region_id,
-                                     'DateStamp': generation_mw.index,
+                                     'DateStamp': generation_mw.index.to_list(),
                                      'GenerationTypeId': generation_type_id,
-                                     'AggregatedGeneration': generation_mw.values}
+                                     'AggregatedGeneration': generation_mw['Actual Aggregated'].values}
                                     )
     logging.info(values_to_insert)
     logging.info('Deleting any rows existing already for region, date range and generation type')
