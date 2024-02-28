@@ -1,39 +1,36 @@
-import datetime
-import gzip
 import logging
 import os
 
 import httpx
+import pandas as pd
 import sqlalchemy
 import streamlit as st
-import altair as alt
-import pandas as pd
-import numpy as np
 from dotenv import load_dotenv
-from pyarrow import feather
-from streamlit_vega_lite import vega_lite_component, altair_component
 
 from src.data.get_common_data import load_common_data_from_db
 
 
 def main():
     logging.basicConfig(level=logging.DEBUG)
-    load_dotenv()
-    HOST = os.getenv('ELEC_LCA_HOST')
-    DB_NAME = os.getenv('ELEC_LCA_DB_NAME')
-    USER = os.getenv('ELEC_LCA_USER')
-    PASSWORD = os.getenv('ELEC_LCA_PASSWORD')
 
-    # Connect to postgres database
-    sql_engine = sqlalchemy.create_engine(sqlalchemy.engine.url.URL.create(
-        drivername='postgresql',
-        host=HOST,
-        database=DB_NAME,
-        username=USER,
-        password=PASSWORD
-    ))
+    if 'sql_engine' not in locals():
+        load_dotenv()
+        HOST = os.getenv('ELEC_LCA_HOST')
+        DB_NAME = os.getenv('ELEC_LCA_DB_NAME')
+        USER = os.getenv('ELEC_LCA_USER')
+        PASSWORD = os.getenv('ELEC_LCA_PASSWORD')
 
-    cache = load_common_data_from_db(sql_engine=sql_engine)
+        # Connect to postgres database
+        sql_engine = sqlalchemy.create_engine(sqlalchemy.engine.url.URL.create(
+            drivername='postgresql',
+            host=HOST,
+            database=DB_NAME,
+            username=USER,
+            password=PASSWORD
+        ))
+
+    if 'cache' not in locals():
+        cache = load_common_data_from_db(sql_engine=sql_engine)
 
     st.title('Electricity LCA Dashboard')
 
@@ -41,8 +38,9 @@ def main():
     st.text(region_code)
 
     generation_type_name = st.selectbox(label='Generation type', options=cache.generation_types['Name'])
-    generation_type_id = 1
-
+    generation_type_id_result = cache.generation_types.loc[cache.generation_types['Name'] == generation_type_name]
+    generation_type_id = generation_type_id_result['Id'].iloc[0]
+    st.text(f'Generation type id = {generation_type_id}')
     start_date = st.date_input(label='Start date')
     st.text('Timezone: Europe (Brussels)')
     st.text(type(start_date))
@@ -56,12 +54,17 @@ def main():
         calculation_response = httpx.get('http://127.0.0.1:8000/generation', params=params)
         if calculation_response.status_code >= 300 or calculation_response.status_code < 200:
             logging.warning(f'Calculation not successful. Status code: {calculation_response.status_code}')
-        impact_df = pd.DataFrame(calculation_response.json())
+            st.text('Calculation Error')
+            return
+
+        calculation_json = calculation_response.json()
+
+        impact_df = pd.DataFrame.from_dict(calculation_json)
         impact_df['DateStamp'] = pd.to_datetime(impact_df['DateStamp'], utc=True,unit='ms')
 
         st.line_chart(impact_df, x='DateStamp', y='AggregatedGeneration', color='GenerationTypeId')
         with st.expander('See data'):
-            st.table(impact_df)
+            st.dataframe(impact_df)
 
 def get_available_dates(region_code):
     raise NotImplementedError()

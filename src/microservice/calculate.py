@@ -31,7 +31,8 @@ class ImpactResultSchema(BaseModel):
 async def calculate_impact_df(date_start, region_code: str, generation_type_id: int, engine):
     logging.debug(
         f'Getting electricity generation data for date {date_start}, region code {region_code}, generation type id {generation_type_id}')
-    generation_df = await get_electricity_generation_df(date_start, region_code, generation_type_id,engine=engine)
+    generation_df = await get_electricity_generation_df(date_start, None, region_code, generation_type_id,
+                                                        engine=engine)
     logging.debug('Retrieved generation data')
     environmental_impacts_df = await get_calculation_data(engine=engine)
 

@@ -65,6 +65,11 @@ The microservice runs continuously in the background and receives requests from 
 A high level illustration of the components looks like this:
 ![data flow.png](docs/data%20flow.png)
 
+# Debugging
+- You can debug the microservice (src/microservice/main.py) by debugging the main() function. Screenshot from PyCharm below
+![Screenshot of debug option in Pycharm](docs/debug_microservice_pycharm.png)
+- You can debug the StreamLit application in PyCharm using the `Debug Streamlit.run.xml` in the `.run` folder. Note that the microservice must be running [more info in this video](https://youtu.be/IFAmwYZC3eA?feature=shared)
+
 # Acknowledgements
 - This is a project undertaken as part of training for the _Data Engineering_ course run by [DataScientest](https://datascientest.com/) from August 2023 - July 2024. Concepts from the course have been applied where relevant to the project.
 - The [data science cookiecutter template](https://github.com/drivendata/cookiecutter-data-science.git) by [DrivenData](https://www.drivendata.org/) for the starting structure for the project

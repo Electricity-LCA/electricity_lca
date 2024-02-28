@@ -67,7 +67,7 @@ async def list_generation_type_mappings():
 @app.get('/generation')
 async def get_electricity_generation(date_start, region_code: str, generation_type_id: int):
     try:
-        df = await get_electricity_generation_df(date_start, region_code, generation_type_id,engine=engine)
+        df = await get_electricity_generation_df(date_start, None, region_code, generation_type_id, engine=engine)
     except TypeError as e:
         return Response(status_code=400, content=str(e))
     except ValueError as e:
@@ -76,7 +76,7 @@ async def get_electricity_generation(date_start, region_code: str, generation_ty
         return Response(status_code=500, content=str(e))
     if not isinstance(df, pd.DataFrame):
         return Response(status_code=500)
-    return Response(df.to_json(), media_type="application/json")
+    return Response(df.to_json(orient='records'), media_type="application/json")
 
 
 @app.get('/calculate', response_model=ImpactResultSchema)
@@ -91,7 +91,7 @@ async def calculate_impact(date_start, region_code: str, generation_type_id: int
         return Response(status_code=500, content=str(e))
     if not isinstance(impact_df, pd.DataFrame):
         return Response(status_code=500)
-    return Response(impact_df.to_json(), media_type='text/json')
+    return Response(impact_df.to_json(orient='records'), media_type='text/json')
 
 
 if __name__ == '__main__':
