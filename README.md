@@ -9,12 +9,32 @@ Estimate real-time environmental impacts using electricity generation data repor
 5. Copy `template_project.env` to a new file `.env` and fill the copied file with `ENTSOE_SECURITY_TOKEN` = your ENTSOE security token. Fill the connection details to your postgres sql instance
 6. Create virtual environment
 ```commandline
-venv create -r requirement.txt
+venv create elec_lca_venv
+```
+7. Install requirements
+```commandline
+pip install -r requirement.txt
 ```
 7. Run `python src/setup/setup.py` to initalize the database schema and load static data 
 8. Run all tests under `tests/`
 
-# How to use
+# Set up database
+Run 
+```commandline
+python src/setup/setup.py
+```
+> This creates the tables in the database and fills the constant value (e.g. environmental impacts, regions, electricity generation types)
+> using the data in the `data/` directory
+
+# Run ETL pipeline
+1. Ensure that you have set the .env file (or environment values) correctly, including an ENTSO-E security token authorized to access the ENTSO-E API
+2. Set the start date and end date that you wish to retrieve data for in main()
+2. Run the pipeline
+```commandline
+python src/pipelines/retrieve_from_entsoe.py
+```
+
+# Start microservice and dashboard
 1. Run `launch.sh` (on linux)
 
 # Data sources

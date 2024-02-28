@@ -2,6 +2,11 @@ import logging
 import time
 import pandas as pd
 import sqlalchemy
+from sqlalchemy.orm import sessionmaker
+from src.orm.base import sql_alchemy_base
+
+from src.microservice.constants import ServerError, ROW_LIMIT
+from src.orm.base import Regions, ElectricityGeneration
 
 
 def store_generation_data_to_db(
@@ -37,18 +42,19 @@ def store_generation_data_to_db(
                                      'AggregatedGeneration': generation_mw['Actual Aggregated'].values}
                                     )
     logging.info(values_to_insert)
-    logging.info('Deleting any rows existing already for region, date range and generation type')
-    with sql_engine.connect() as connection:
-        deletion_result = connection.execute(
-            sqlalchemy.text(f"""DELETE FROM public."ElectricityGeneration" as el
-                WHERE 
-                    el."DateStamp" >= '{start}'
-                and el."DateStamp" <= '{end}'
-                and el."RegionId" = {region_id}
-                and el."GenerationTypeId" = {generation_type_id}""")
+    session_obj = sessionmaker(bind=sql_engine)
+    with session_obj() as session:
+        elec_gen_table = sqlalchemy.Table('ElectricityGeneration', sql_alchemy_base.metadata, autoload=True)
+        delete_query = elec_gen_table.delete().where(
+            (elec_gen_table.c.DateStamp >= start) &
+            (elec_gen_table.c.DateStamp <= end) &
+            (elec_gen_table.c.RegionId == int(region_id)) &
+            (elec_gen_table.c.GenerationTypeId == int(generation_type_id))
         )
-        connection.commit()
-        logging.info(f'{deletion_result.rowcount} rows deleted')
+        deletion_result = session.execute(delete_query)
+        session.commit()
+        logging.info(f'{deletion_result.rowcount} rows deleted, that already existed for region={region_id}, date range=`{start}`-`{end}` and generation type={generation_type_id}')
+
     time.sleep(1)
     count_rows = values_to_insert.to_sql('ElectricityGeneration', sql_engine, if_exists='append', index=False)
     logging.info(f'Inserted {count_rows} values for region with id = `{region_id}` to database')

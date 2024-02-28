@@ -23,6 +23,7 @@ class GenerationResultSchema(BaseModel):
                  {'Id': 7155, 'RegionId': 26, 'DateStamp': 1701477000000, 'GenerationTypeId': 2,
                   'AggregatedGeneration': 1390.0}]
             }]
+        }
     }
 
 async def get_electricity_generation_df(date_start, date_end, region_code: str, generation_type_id: int, engine) -> pd.DataFrame:

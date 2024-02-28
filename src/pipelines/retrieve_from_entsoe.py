@@ -22,12 +22,11 @@ generation_type_to_id_mapping = {
 }
 
 # Logging
-logger = logging.getLogger('data_loader')
-logger.addHandler(logging.FileHandler('data_loader.log'))
-
+logging.basicConfig(level=logging.DEBUG, filename='data_loader.log', format='%(asctime)s: %(message)s')
+# logging.addHandler(logging.FileHandler('data_loader.log'))
 
 def my_handler(type, value, tb):
-    logger.exception("Uncaught exception: {0}".format(str(value)))
+    logging.exception("Uncaught exception: {0}".format(str(value)))
 
 
 sys.excepthook = my_handler
