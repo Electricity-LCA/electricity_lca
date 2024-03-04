@@ -91,6 +91,5 @@ A high level illustration of the components looks like this:
 - You can debug the StreamLit application in PyCharm using the `Debug Streamlit.run.xml` in the `.run` folder. Note that the microservice must be running [more info in this video](https://youtu.be/IFAmwYZC3eA?feature=shared)
 
 # Acknowledgements
-- This is a project undertaken as part of training for the _Data Engineering_ course run by [DataScientest](https://datascientest.com/) from August 2023 - July 2024. Concepts from the course have been applied where relevant to the project.
 - The [data science cookiecutter template](https://github.com/drivendata/cookiecutter-data-science.git) by [DrivenData](https://www.drivendata.org/) for the starting structure for the project
-- Last but not least my coach Gregor Wernet for the initial motivation for this project.
+- Gregor Wernet for the initial motivation for this project.
