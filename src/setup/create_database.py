@@ -14,13 +14,15 @@ def create_new_database(drop_existing=False):
     DB_NAME = os.getenv('ELEC_LCA_DB_NAME')
     USER = os.getenv('ELEC_LCA_USER')
     PASSWORD = os.getenv('ELEC_LCA_PASSWORD')
+    PORT = os.getenv('ELEC_LCA_DB_PORT')
 
     engine = sqla.create_engine(sqla.engine.url.URL.create(
         drivername='postgresql',
         host=HOST,
         database=DB_NAME,
         username=USER,
-        password=PASSWORD
+        password=PASSWORD,
+        port=PORT
     ))
     if drop_existing is True:
         sql_alchemy_base.metadata.drop_all(bind=engine)

@@ -19,6 +19,7 @@ def main():
         DB_NAME = os.getenv('ELEC_LCA_DB_NAME')
         USER = os.getenv('ELEC_LCA_USER')
         PASSWORD = os.getenv('ELEC_LCA_PASSWORD')
+        PORT = os.getenv('ELEC_LCA_DB_PORT')
 
         # Connect to postgres database
         sql_engine = sqlalchemy.create_engine(sqlalchemy.engine.url.URL.create(
@@ -26,7 +27,8 @@ def main():
             host=HOST,
             database=DB_NAME,
             username=USER,
-            password=PASSWORD
+            password=PASSWORD,
+            port=PORT
         ))
 
     if 'cache' not in locals():

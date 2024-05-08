@@ -82,13 +82,15 @@ if __name__ == "__main__":
     DB_NAME = os.getenv('ELEC_LCA_DB_NAME')
     USER = os.getenv('ELEC_LCA_USER')
     PASSWORD = os.getenv('ELEC_LCA_PASSWORD')
+    PORT = os.getenv('ELEC_LCA_DB_PORT')
 
     engine = sqlalchemy.create_engine(sqlalchemy.engine.url.URL.create(
         drivername='postgresql',
         host=HOST,
         database=DB_NAME,
         username=USER,
-        password=PASSWORD
+        password=PASSWORD,
+        port=PORT
     ))
 
     indexes = ["id1", "id2"]

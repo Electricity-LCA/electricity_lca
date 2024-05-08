@@ -53,13 +53,15 @@ def main():
     DB_NAME = os.getenv('ELEC_LCA_DB_NAME')
     USER = os.getenv('ELEC_LCA_USER')
     PASSWORD = os.getenv('ELEC_LCA_PASSWORD')
+    PORT = os.getenv('ELEC_LCA_DB_PORT')
 
     engine = sqla.create_engine(sqla.engine.url.URL.create(
         drivername='postgresql',
         host=HOST,
         database=DB_NAME,
         username=USER,
-        password=PASSWORD
+        password=PASSWORD,
+        port=PORT
     ))
     session_obj = sessionmaker(bind=engine)
 

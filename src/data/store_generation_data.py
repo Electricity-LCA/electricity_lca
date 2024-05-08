@@ -52,8 +52,9 @@ def store_generation_data_to_db(
             (elec_gen_table.c.GenerationTypeId == int(generation_type_id))
         )
         deletion_result = session.execute(delete_query)
+        logging.info(f'{deletion_result.rowcount} rows deleted, that already existed for region={region_id} '
+                     f'date range=`{start}`-`{end}` and generation type={generation_type_id}')
         session.commit()
-        logging.info(f'{deletion_result.rowcount} rows deleted, that already existed for region={region_id}, date range=`{start}`-`{end}` and generation type={generation_type_id}')
 
     time.sleep(1)
     count_rows = values_to_insert.to_sql('ElectricityGeneration', sql_engine, if_exists='append', index=False)

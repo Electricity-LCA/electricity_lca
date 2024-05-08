@@ -19,6 +19,7 @@ HOST = os.getenv('ELEC_LCA_HOST')
 DB_NAME = os.getenv('ELEC_LCA_DB_NAME')
 USER = os.getenv('ELEC_LCA_USER')
 PASSWORD = os.getenv('ELEC_LCA_PASSWORD')
+PORT = os.getenv('ELEC_LCA_DB_PORT')
 
 # Connect to postgres database
 engine = sqla.create_engine(sqla.engine.url.URL.create(
@@ -26,7 +27,8 @@ engine = sqla.create_engine(sqla.engine.url.URL.create(
     host=HOST,
     database=DB_NAME,
     username=USER,
-    password=PASSWORD
+    password=PASSWORD,
+    port=PORT
 ))
 cache = load_common_data_from_db(sql_engine=engine)
 
