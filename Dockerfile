@@ -11,6 +11,12 @@ RUN pip install --no-cache-dir --upgrade -r requirements.txt
 WORKDIR /elec_lca/
 ADD src/ ./src
 ADD .env .
+# For microservice background
 EXPOSE 8000
+# For streamlit dashboard
+EXPOSE 8900
+# For database
+EXPOSE 25060
 ENV PYTHONPATH="/elec_lca"
-CMD python src/microservice/main.py
+CMD uvicorn src.microservice.main:app --reload --host 0.0.0.0 --port 8000 --workers=3 &
+CMD streamlit run src/visualization/visualize.py --server.port=8900 --server.address=0.0.0.0
