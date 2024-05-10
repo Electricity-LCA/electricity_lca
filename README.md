@@ -35,7 +35,17 @@ python src/pipelines/retrieve_from_entsoe.py
 ```
 
 # Start microservice and dashboard
+## Running directly
 1. Run `launch.sh` (on linux)
+## Running via Docker
+```commandline
+docker image build . -t elec_lca_microservice:latest
+```
+then
+```commandline
+docker container run -d --rm -p 8000:8000 -p 25060:25060 elec_lca_microservice:latest
+```
+This should start a web browser showing a dashboard on localhost:8900
 
 # Data sources
 ## Environmental data

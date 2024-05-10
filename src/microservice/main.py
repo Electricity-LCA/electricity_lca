@@ -12,7 +12,7 @@ import uvicorn
 from src.data.get_common_data import load_common_data_from_db
 from src.microservice.calculate import ImpactResultSchema, calculate_impact_df
 from src.microservice.constants import ServerError
-from src.microservice.generation import get_electricity_generation_df
+from src.microservice.generation import get_electricity_generation_df, get_earliest_date_for_region
 
 load_dotenv()
 HOST = os.getenv('ELEC_LCA_HOST')
@@ -65,6 +65,29 @@ async def list_generation_types():
 async def list_generation_type_mappings():
     generation_type_mappings_df = cache.generation_type_mappings
     return Response(generation_type_mappings_df.to_json(orient='records'), media_type="application/json")
+
+
+@app.get('/earliest_generation_datestamp')
+async def get_earliest_datestamp_for_region(region_code: str):
+    """
+     If there is no data for a given region returns an empty data frame with a 204 status code
+
+    @param region_code:
+    @return:
+    """
+    try:
+        date_or_status = get_earliest_date_for_region(region_code, engine=engine)
+    except TypeError as e:
+        return Response(status_code=400, content=str(e))
+    except ValueError as e:
+        return Response(status_code=422, content=str(e))
+    except ServerError as e:
+        return Response(status_code=500, content=str(e))
+    if date_or_status == 204:
+        return Response(status_code=204)
+
+    return Response(date_or_status,status_code=200)
+
 
 @app.get('/generation')
 async def get_electricity_generation(date_start, region_code: str, generation_type_id: int):
