@@ -13,7 +13,7 @@ def store_generation_data_to_db(
         generation_mw: pd.Series,
         generation_type_id: int,
         region_id: int,
-        sql_engine: sqlalchemy.Engine) -> bool:
+        sql_engine:sqlalchemy.engine.Engine) -> bool:
     """
     Store electricity time series power generation data to elec_lca database. Uses an upsert approach, removing any
         existing generation data for the same interval and region id (as it is likely outdated or null, as new data is generated continuously).
@@ -56,9 +56,10 @@ def store_generation_data_to_db(
                      f'date range=`{start}`-`{end}` and generation type={generation_type_id}')
         session.commit()
 
-    time.sleep(1)
-    count_rows = values_to_insert.to_sql('ElectricityGeneration', sql_engine, if_exists='append', index=False)
-    logging.info(f'Inserted {count_rows} values for region with id = `{region_id}` to database')
-    e = time.time()
+    with sql_engine.connect() as conn:
+        time.sleep(1)
+        count_rows = values_to_insert.to_sql('ElectricityGeneration', sql_engine, if_exists='append', index=False)
+        logging.info(f'Inserted {count_rows} values for region with id = `{region_id}` to database')
+        e = time.time()
     logging.info(f'{e - s_1:.2f} s to write to database')
     return True

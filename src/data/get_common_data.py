@@ -15,10 +15,11 @@ class BasicDataCache:
     retrieved_timestamp: datetime.datetime
 
 
-def load_common_data_from_db(sql_engine):
-    generation_types = pd.read_sql(sqlalchemy.text('SELECT * FROM public."ElectricityGenerationTypes"'), sql_engine)
-    generation_type_mappings = pd.read_sql(sqlalchemy.text('SELECT * FROM public."ElectricityGenerationTypesMapping"'), sql_engine)
-    regions = pd.read_sql(sqlalchemy.text('SELECT * FROM public."Regions"'), sql_engine)
-    retrieved_timestamp = datetime.datetime.now(datetime.timezone.utc)
+def load_common_data_from_db(sql_engine:sqlalchemy.engine.Engine):
+    with sql_engine.connect() as conn:
+        generation_types = pd.read_sql('SELECT * FROM public."ElectricityGenerationTypes"', conn.connection)
+        generation_type_mappings = pd.read_sql('SELECT * FROM public."ElectricityGenerationTypesMapping"', conn.connection)
+        regions = pd.read_sql('SELECT * FROM public."Regions"', conn.connection)
+        retrieved_timestamp = datetime.datetime.now(datetime.timezone.utc)
 
-    return BasicDataCache(generation_types=generation_types, regions=regions, retrieved_timestamp=retrieved_timestamp,generation_type_mappings=generation_type_mappings)
+        return BasicDataCache(generation_types=generation_types, regions=regions, retrieved_timestamp=retrieved_timestamp,generation_type_mappings=generation_type_mappings)

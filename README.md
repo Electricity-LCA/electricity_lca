@@ -29,9 +29,9 @@ python src/setup/setup.py
 # Run ETL pipeline
 1. Ensure that you have set the .env file (or environment values) correctly, including an ENTSO-E security token authorized to access the ENTSO-E API
 2. Set the start date and end date that you wish to retrieve data for in main()
-2. Run the pipeline
+3. Run the pipeline
 ```commandline
-python src/pipelines/retrieve_from_entsoe.py
+python src/pipelines/retrieve_from_entsoe.py -s 20240101 20240301
 ```
 
 # Start microservice and dashboard
@@ -46,6 +46,33 @@ then
 docker container run -d --rm -p 8000:8000 -p 25060:25060 elec_lca_microservice:latest
 ```
 This should start a web browser showing a dashboard on localhost:8900
+
+# Task Orchestration
+Task orchestration is done via Airflow. Airflow is a task orchestration service written in Python
+
+    Airflow requires sqlalchemy<2, which messes up the pipelines it is supposed to run.
+    TODO: Figure out a solution
+
+~~## Setup Airflow~~
+1. With the venv environment activated (see above), run the following
+```shell
+export AIRFLOW_HOME=${PWD}/airflow
+```
+2. Iniate Airflow database
+```shell
+airflow db init
+```
+3. Create a folder for dags
+```shell
+mkdir -p ${AIRFLOW_HOME}/dags/
+```
+
+## Retrieving data from ENTSO-E using Airflow
+1. Launch Airflow 
+```commandline
+airflow standalone
+```
+2. Visit `localhost:8080` to view the Airflow dashboard 
 
 # Data sources
 ## Environmental data
