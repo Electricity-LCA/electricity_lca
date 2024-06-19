@@ -9,6 +9,7 @@ from entsoe.mappings import Area
 
 
 def fill_regions():
+    """Fill a Regions table in the SQL database using the bidding zones named in entsoe.mappings.Areas"""
     bidding_zones = [x.name for x in Area]
 
     load_dotenv()

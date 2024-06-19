@@ -1,6 +1,5 @@
 import logging
 import pandas as pd
-from pydantic import BaseModel
 from sqlalchemy.orm import sessionmaker
 
 from src.microservice.constants import ServerError, ROW_LIMIT

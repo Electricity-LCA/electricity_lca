@@ -47,6 +47,7 @@ entsoe_generation_types_to_unece = {
 
 
 def main():
+    """Run fill impacts and generation types"""
     # Connect to database
     load_dotenv()
     HOST = os.getenv('ELEC_LCA_HOST')

@@ -33,17 +33,6 @@ cache = load_common_data_from_db(sql_engine=engine)
 app = FastAPI()
 
 
-def cache_data(f):
-    cache = {}
-
-    def foo(x):
-        if x not in cache:
-            cache[x] = f(x)
-        return cache[x]
-
-    return foo
-
-
 @app.get('/docs')
 def get_docs():
     return get_swagger_ui_html(title='API documentation for elc_lca')

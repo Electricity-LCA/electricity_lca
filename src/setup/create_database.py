@@ -1,14 +1,15 @@
-from dotenv import load_dotenv
 import os
+
+from dotenv import load_dotenv
 import sqlalchemy as sqla
 
-# from src.data.save_unece_lcia_results_to_database import load_and_save_impact_data
-# from src.orm.fill_regions import fill_regions
 from src.orm.base import sql_alchemy_base
 
 
 def create_new_database(drop_existing=False):
-    
+    """Create a new SQL database with the schema defined using sqlalchemy.
+    See src.orm.base.sql_alchemy_base for the schema."""
+
     load_dotenv()
     HOST = os.getenv('ELEC_LCA_HOST')
     DB_NAME = os.getenv('ELEC_LCA_DB_NAME')
@@ -31,6 +32,7 @@ def create_new_database(drop_existing=False):
     # fill_regions()  # Fill the regions table
     # load_and_save_impact_data()  # Fill the environmental impact data tables
     #
+
 
 if __name__ == '__main__':
     create_new_database(drop_existing=False)
