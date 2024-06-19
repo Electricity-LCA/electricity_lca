@@ -128,7 +128,7 @@ $do$;'''))
         unknown_generation_type_id)
     generation_mapping_2.loc[:, 'DataSourceName'] = 'ENTSO-E'
     generation_mapping_2.loc[:,
-    'Comment'] = f'Loaded from Table 13, UNECE. “Life Cycle Assessment of Electricity Generation Options | UNECE.” Accessed December 5, 2023. https://unece.org/sed/documents/2021/10/reports/life-cycle-assessment-electricity-generation-options.'
+    'Comment'] = 'Loaded from Table 13, UNECE. “Life Cycle Assessment of Electricity Generation Options | UNECE.” Accessed December 5, 2023. https://unece.org/sed/documents/2021/10/reports/life-cycle-assessment-electricity-generation-options.'
     generation_mapping_2.index.rename('Id', inplace=True)
     generation_mapping_2 = generation_mapping_2.reset_index()
     generation_mapping_2.to_sql(con=engine, name='ElectricityGenerationTypesMapping', if_exists='append', index=False)
