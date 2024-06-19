@@ -43,7 +43,7 @@ docker image build . -t elec_lca_microservice:latest
 ```
 then
 ```commandline
-docker container run -d --rm -p 8000:8000 -p 25060:25060 elec_lca_microservice:latest
+docker container run -d --rm -p 8000:8000 -p 8900:8900 -p 25060:25060 elec_lca_microservice:latest
 ```
 This should start a web browser showing a dashboard on localhost:8900
 
