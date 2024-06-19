@@ -1,12 +1,11 @@
 import logging
 import time
+
 import pandas as pd
 import sqlalchemy
 from sqlalchemy.orm import sessionmaker
-from src.orm.base import sql_alchemy_base
 
-from src.microservice.constants import ServerError, ROW_LIMIT
-from src.orm.base import Regions, ElectricityGeneration
+from src.orm.base import sql_alchemy_base
 
 
 def store_generation_data_to_db(

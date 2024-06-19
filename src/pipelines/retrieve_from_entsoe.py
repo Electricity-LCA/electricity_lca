@@ -3,6 +3,7 @@ import os
 import pprint
 import sys
 from typing import List, Tuple
+import time
 
 import pandas as pd
 import dotenv
@@ -11,22 +12,17 @@ import sqlalchemy
 from dotenv import load_dotenv
 from entsoe import EntsoePandasClient
 from entsoe.exceptions import NoMatchingDataError
-import time
 
 from src.data.get_common_data import BasicDataCache, load_common_data_from_db
 from src.data.store_generation_data import store_generation_data_to_db
 
-# TODO: Move mapping to the database
-generation_type_to_id_mapping = {
-    ('Fossil Hard coal', 'Actual Aggregated'): 1
-}
 
 # Logging
 logging.basicConfig(level=logging.DEBUG, filename='data_loader.log', format='%(asctime)s: %(message)s')
 # logging.addHandler(logging.FileHandler('data_loader.log'))
 
 def my_handler(type, value, tb):
-    logging.exception("Uncaught exception: {0}".format(str(value)))
+    logging.exception("Uncaught exception: %s", str(value))
 
 
 sys.excepthook = my_handler
