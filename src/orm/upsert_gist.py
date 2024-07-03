@@ -3,11 +3,12 @@
 # Upsert function for pandas to_sql with postgres
 # https://stackoverflow.com/questions/1109061/insert-on-duplicate-update-in-postgresql/8702291#8702291
 # https://www.postgresql.org/docs/devel/sql-insert.html#SQL-ON-CONFLICT
+import os
+import uuid
+
 import pandas as pd
 import sqlalchemy
 from sqlalchemy import text
-import uuid
-import os
 from dotenv import load_dotenv
 
 

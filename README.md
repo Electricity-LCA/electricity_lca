@@ -48,10 +48,11 @@ python src/pipelines/retrieve_from_entsoe.py
 See references for further
 
 # Data Engineering Rational and Design Choice
-## DevOps - GitHub and Pytest
+## DevOps - GitHub, Pytest, pylint
 - Repository code: https://github.com/tur-ium/electricity_lca (contact Artur for access)
 - Standardization - cookiecutter data science template, `pandera` for ensuring conformance of data to expectations, table-level SQL constraints to perform validity checks
 - Unit / integration testing : Pytest
+- Code quality: pylint + GitHub actions (see .github/workflows/pylint.yml, or go to the `Actions` tab in the top)
 - ETL - Python + pandas (with pyArrow)
 
 ## Database - Postgres

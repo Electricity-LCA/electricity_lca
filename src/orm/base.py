@@ -3,6 +3,7 @@ import sqlalchemy as sqla
 
 sql_alchemy_base = declarative_base()
 
+
 class ImpactCategories(sql_alchemy_base):
     __tablename__ = 'ImpactCategories'
     Id = sqla.Column(sqla.Integer, primary_key=True, autoincrement=True, nullable=True)
@@ -26,6 +27,8 @@ class ElectricityGenerationTypesMapping(sql_alchemy_base):
         sqla.ForeignKeyConstraint(['ElectricityGenerationTypeId'], ['ElectricityGenerationTypes.Id']),
         sqla.UniqueConstraint('DataSourceName', 'ExternalName', name='UX_ElectricityGenerationTypesMapping_Import'),
     )
+
+
 class EnvironmentalImpacts(sql_alchemy_base):
     __tablename__ = 'EnvironmentalImpacts'
     Id = sqla.Column(sqla.Integer, primary_key=True, autoincrement=True, nullable=True)
@@ -40,6 +43,7 @@ class EnvironmentalImpacts(sql_alchemy_base):
         sqla.ForeignKeyConstraint(['ImpactCategoryId'], ['ImpactCategories.Id']),
         sqla.UniqueConstraint('ElectricityGenerationTypeId', 'ImpactCategoryId', name='UX_EnvironmentalImpacts'),
     )
+
 
 class Regions(sql_alchemy_base):
     __tablename__ = 'Regions'

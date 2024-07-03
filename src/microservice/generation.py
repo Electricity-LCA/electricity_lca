@@ -1,30 +1,10 @@
 import logging
 import pandas as pd
-from pydantic import BaseModel
 from sqlalchemy.orm import sessionmaker
 
 from src.microservice.constants import ServerError, ROW_LIMIT
 from src.orm.base import Regions, ElectricityGeneration
 
-class GenerationResultSchema(BaseModel):
-    GenerationUnit: str
-    PerUnit: str
-    ConversionFactor: float
-    AggregatedGenerationConverted: float
-    EnvironmentalImpact: float
-    model_config = {
-        "json_schema_extra": {
-            "examples": [{
-                "result":
-                [{'Id': 7153, 'RegionId': 26, 'DateStamp': 1701475200000, 'GenerationTypeId': 2,
-                  'AggregatedGeneration': 1398.0},
-                 {'Id': 7154, 'RegionId': 26, 'DateStamp': 1701476100000, 'GenerationTypeId': 2,
-                  'AggregatedGeneration': 1390.0},
-                 {'Id': 7155, 'RegionId': 26, 'DateStamp': 1701477000000, 'GenerationTypeId': 2,
-                  'AggregatedGeneration': 1390.0}]
-            }]
-        }
-    }
 
 async def get_electricity_generation_df(date_start, date_end, region_code: str, generation_type_id: int, engine) -> pd.DataFrame:
     if not isinstance(region_code, str):
